@@ -17,16 +17,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Grant execution permission
-        run: chmod +x gradlew
       - name: Install gradle Wrapper
         run: gradle installWrapper
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v1
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
+      - name: Grant execution permission
+        run: chmod +x gradlew
       - name: Cache Gradle packages
         uses: actions/cache@v1
         with:
@@ -35,6 +29,12 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - name: Build
         run: ./gradlew build
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
