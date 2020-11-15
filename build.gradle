@@ -62,12 +62,14 @@ task runUI(dependsOn: buildUI) {
 }
 
 task down(type: Download) {
+    println "download"
     src 'https://datahub.io/core/covid-19/r/covid-19_zip.zip'
     dest buildDir
     onlyIfModified true
 }
 
 task unzip(type: Copy, dependsOn: down) {
+    println "unzip"
     def zipFile = file("${buildDir}/covid-19_zip.zip")
     def outputDir = file("$buildDir/unpacked/dist")
 
@@ -76,6 +78,7 @@ task unzip(type: Copy, dependsOn: down) {
 }
 
 task copyJson(type: Copy, dependsOn: unzip) {
+    println "copyJson"
     def jsonFile = file("$buildDir/unpacked/dist/data/countries-aggregated_json.json")
     def resourceFolder = file("src/main/resources")
 
