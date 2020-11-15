@@ -17,7 +17,7 @@ task installWrapper(type: Wrapper) {
 }
 
 
-task buildCore(dependsOn: 'copyJson') {
+task buildCore() {
     println "build core"
     doLast {
         sourceSets {
@@ -31,7 +31,7 @@ task buildCore(dependsOn: 'copyJson') {
     finalizedBy(build)
 }
 
-task buildUI(dependsOn: 'copyJson') {
+task buildUI() {
     println "build ui"
     doLast {
         sourceSets {
@@ -59,31 +59,6 @@ task runUI(dependsOn: buildUI) {
         mainClassName = 'de.unitrier.st.ui.Ui'
     }
     finalizedBy(run)
-}
-
-task down(type: Download) {
-    println "download"
-    src 'https://datahub.io/core/covid-19/r/covid-19_zip.zip'
-    dest buildDir
-    onlyIfModified true
-}
-
-task unzip(type: Copy, dependsOn: down) {
-    println "unzip"
-    def zipFile = file("${buildDir}/covid-19_zip.zip")
-    def outputDir = file("$buildDir/unpacked/dist")
-
-    from zipTree(zipFile)
-    into outputDir
-}
-
-task copyJson(type: Copy, dependsOn: unzip) {
-    println "copyJson"
-    def jsonFile = file("$buildDir/unpacked/dist/data/countries-aggregated_json.json")
-    def resourceFolder = file("src/main/resources")
-
-    from(jsonFile)
-    into resourceFolder
 }
 
 
